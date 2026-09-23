@@ -1,0 +1,10 @@
+{
+  "name": "My Schedule",
+  "short_name": "Schedule",
+  "description": "Моё расписание занятий",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f0d",
+  "theme_color": "#0b0f0d",
+  "orientation": "portrait"
+}

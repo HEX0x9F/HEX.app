@@ -1,0 +1,382 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0f0d;
+  color: #ffffff;
+}
+
+button {
+  font-family: inherit;
+}
+
+.app {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* HEADER */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.subtitle {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #7c8a82;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.current-time {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* DAYS */
+
+.days {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 6px;
+  background: #111814;
+  border: 1px solid #1e2922;
+  border-radius: 14px;
+}
+
+.days button {
+  flex: 1;
+  padding: 12px 8px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #7c8a82;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.days button:hover {
+  color: #ffffff;
+  background: #18221c;
+}
+
+.days button.active {
+  background: #9cffb0;
+  color: #0b0f0d;
+  font-weight: 700;
+}
+
+/* SCHEDULE */
+
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lesson {
+  display: flex;
+  gap: 20px;
+}
+
+.lesson-time {
+  width: 65px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  color: #65736a;
+  font-size: 13px;
+  text-align: right;
+}
+
+/* LESSON CARD */
+
+.lesson-card {
+  flex: 1;
+  padding: 24px;
+  background: #111814;
+  border: 1px solid #1e2922;
+  border-radius: 18px;
+  transition: 0.2s;
+}
+
+.lesson-card:hover {
+  border-color: #9cffb0;
+  transform: translateY(-2px);
+}
+
+.lesson-card.current {
+  border-color: #9cffb0;
+  box-shadow: 0 0 0 1px #9cffb0;
+}
+
+.lesson-number {
+  display: block;
+  margin-bottom: 10px;
+  color: #9cffb0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.lesson-card h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.lesson-russian {
+  margin: 6px 0 20px;
+  color: #65736a;
+  font-size: 14px;
+}
+
+/* LESSON DETAILS */
+
+.lesson-details {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-top: 16px;
+  border-top: 1px solid #1e2922;
+}
+
+.lesson-details div {
+  display: flex;
+  gap: 12px;
+  color: #aeb9b2;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.lesson-details span {
+  min-width: 42px;
+  color: #9cffb0;
+  font-weight: 600;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+.app {
+  padding: 24px 16px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 24px;
+}
+
+.current-time {
+  font-size: 20px;
+}
+
+.days {
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.days button {
+  padding: 10px 4px;
+  font-size: 13px;
+}
+
+.lesson {
+  gap: 10px;
+}
+
+.lesson-time {
+  width: 50px;
+  font-size: 11px;
+}
+
+.lesson-card {
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.lesson-card h2 {
+  font-size: 20px;
+}
+
+.lesson-russian {
+  font-size: 13px;
+}
+
+.lesson-details div {
+  font-size: 12px;
+}
+
+}
+
+.next-lesson {
+	margin-bottom: 24px;
+	padding: 18px 20px;
+	background: #18221c;
+	border: 1px solid #2a382f;
+	border-radius: 16px;
+}
+
+.next-lesson span {
+	display: block;
+	margin-bottom: 6px;
+	color: #9cffb0;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 1px;
+	text-transform: uppercase;  
+}
+
+.next-lesson h2 {
+	margin: 0;
+	font-size: 20px;
+}
+
+.next-lesson p {
+	margin: 5px 0 0;
+	color: #7c8a82;
+	font-size: 13px;
+}
+
+.current-status {
+	margin-bottom: 16px;
+	padding: 18px 20px;
+	background: #111814;
+	border: 1px solid #9cffb0;
+	border-radius: 16px;
+}
+
+.current-status span {
+	display: block;
+	margin-bottom: 6px;
+	color: #9cffb0;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 1px;
+	text-transform: uppercase; 
+}
+
+.current-status h2 {
+	margin: 0;
+	font-size: 20px;
+}
+
+.current-status p {
+	margin: 5px 0 0;
+	color: #7c8a82;
+	font-size: 13px;
+}
+
+.minutes_-left {
+	margin-top: 14px;
+	padding-top: 12px;
+	border-top: 1px solid #1e2922;
+	color: #9cffb0;
+	font-size:14px;
+	font-weight: 600;
+}
+
+.countdown {
+	margin-top: 16px;
+	padding-top: 14px;
+	border-top: 1px solid #1e2922;
+}
+
+.countdown-title {
+	display: block;
+	margin-bottom: 8px;
+	color: #7c8a82;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+}
+
+.countdown-time {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.countdown-unit {
+	display: flex;
+	align-items: baseline;
+	gap: 5px;
+}
+
+.countdown-unit strong {
+	color: #9cffb0;
+	font-size: 32px;
+	line-height: 1;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.countdown-unit span {
+	color: #7c8a82;
+	font-size: 12px;
+}
+
+.countdown-separator {
+	color: #9cffb0;
+	font-size: 28px;
+	font-weight: 700;
+}
+
+.week-info {
+	margin-bottom: 20px;
+	padding: 16px 20px;
+	background: #111814;
+	border: 1px solid #1e2922;
+	border-radius: 16px;
+}
+
+.week-info span {
+	display: block;
+	margin-bottom: 5px;
+	color: #7c8a82;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+}
+
+.week-info strong {
+	display: block;
+	color: #9cffb0;
+	font-size: 24px;
+}
+
+.week-info p {
+	margin: 5px 0 0;
+	color: #7c8a82;
+	font-size: 13px;
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 40px 25px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 35px;
+}
+
+.subtitle {
+  margin: 0 0 8px;
+  color: #888;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.current-time {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.days {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 35px;
+}
+
+.days button {
+  flex: 1;
+  padding: 13px 5px;
+  border: 1px solid #333;
+  border-radius: 12px;
+  background: #181818;
+  color: #888;
+  cursor: pointer;
+}
+
+.days button.active {
+  background: white;
+  color: #111;
+}
+
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lesson {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.lesson-time {
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px 0;
+  color: #777;
+  font-size: 13px;
+}
+
+.lesson-card {
+  flex: 1;
+  position: relative;
+  padding: 22px 25px;
+  border: 1px solid #292929;
+  border-radius: 18px;
+  background: #181818;
+}
+
+.lesson-number {
+  color: #666;
+  font-size: 12px;
+}
+
+.lesson-card h2 {
+  margin: 8px 0;
+  font-size: 22px;
+}
+
+.lesson-card p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
