@@ -373,6 +373,50 @@ button {
 	font-size: 13px;
 }
 
+.lesson-progres {
+	margin-top: 18px;
+	padding-top: 14px
+	border-top: 1px solid #1e2922;
+}
+
+.lesson-progress-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.lesson-progress-header span {
+	color: #7c8a82;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+}
+
+.lesson-progress-header strong {
+	color: #9#cffb0;
+	font-sizee: 13px;
+}
+
+.lesson-progress-bar {
+	width: 100%;
+	height: 6px;
+	overflow: hidden;
+	background: #1e2922;
+	border-radius: 10px;
+}
+
+.lesson-progress-fill {
+  height: 100%;
+  background: #9cffb0;
+  border-radius: 10px;
+  transition: width 1s linear;
+}
+
+
+
+
+
 
 
 

@@ -378,6 +378,55 @@ function App() {
       )
   }
 
+  let lessonProgress = 0
+  
+  if (currentLesson && secondsLeft !== null) {
+	  const firstPeriod = Number(
+	    currentLesson.periods.split('-')[0]
+	  )
+	  
+	  const lastPeriod = Number(
+	    currentLesson.periods.split('-')[1]
+	  )
+	  
+	  const startTime = bellTimes[firstPeriod]?.[0]
+	  const endTime = bellTimes[lastPeriod]?.[1]
+	  
+	  if (startTime && endTime) {
+		  const [startHour, startMinute] = startTime
+		    .split(':')
+		    .map(Number)
+		    
+		  const [endHour, endMinute] = endTime
+		    .split(':')
+		    .map(Number)
+		    
+		  const lessonStart =
+		    startHour * 60 * 60 +
+		    startMinute * 60
+		    
+		  const lessonEnd = 
+		    endHour * 60 * 60 +
+		    endMinute * 60
+		    
+		  const totalDuration = 
+		    lessonEnd - lessonStart
+		    
+		  const elapsed = 
+		    totalDuration - secondsLeft
+		    
+		  lessonProgress = Math.min(
+		    100,
+		    Math.max(
+		      0,
+		      Math.round(
+		        (elapsed / totalDuration) * 100
+		      )
+		    )
+		  )
+	  }
+  }
+
   let dayStatus = 'before'
 
   if (currentLesson) {
@@ -693,6 +742,21 @@ function App() {
           <p>
             {currentLesson.russian}
           </p>
+          
+          <div className="lesson-progress">
+            <div className="lesson-progress-header">
+              <span>ПРОГРЕСС ПАРЫ</span>
+              <strong>{lessonProgress}%</strong>
+            </div>
+            
+            <div className="lesson-progress-bar">
+              <div
+                className="lesson-progress-fill"
+                style={{ width: `${lessonProgress}%` }}
+                
+              />
+            </div>
+          </div>
 
           {secondsLeft !== null && (
             <div className="countdown">
