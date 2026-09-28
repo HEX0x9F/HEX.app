@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
 
     <meta
       name="viewport"
@@ -12,9 +12,9 @@
 
     <meta name="theme-color" content="#0b0f0d" />
 
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
 
-    <title>Schedule App</title>
+    <title>HEX.app</title>
   </head>
 
   <body>
@@ -25,7 +25,7 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/sw.js");
+          navigator.serviceWorker.register("./sw.js");
         });
       }
     </script>
