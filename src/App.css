@@ -413,6 +413,21 @@ button {
   transition: width 1s linear;
 }
 
+.lesson-card {
+	cursor: pointer;
+}
+
+.lesson-card:active {
+	transform: scale(0.99);
+}
+
+.expand-indicator {
+	margin-top: 10px;
+	color: #65736a;
+	font-size: 18px;
+	text-align: right;
+	line-height: 1;
+}
 
 
 

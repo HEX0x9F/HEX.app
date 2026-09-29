@@ -73,6 +73,9 @@ const bellTimes = {
 }
 
 function App() {
+  const [expandedLesson, setExpandedLesson] = 
+    useState(null)
+	
   const [currentTime, setCurrentTime] =
     useState(new Date())
 
@@ -379,53 +382,59 @@ function App() {
   }
 
   let lessonProgress = 0
-  
-  if (currentLesson && secondsLeft !== null) {
-	  const firstPeriod = Number(
-	    currentLesson.periods.split('-')[0]
-	  )
-	  
-	  const lastPeriod = Number(
-	    currentLesson.periods.split('-')[1]
-	  )
-	  
-	  const startTime = bellTimes[firstPeriod]?.[0]
-	  const endTime = bellTimes[lastPeriod]?.[1]
-	  
-	  if (startTime && endTime) {
-		  const [startHour, startMinute] = startTime
-		    .split(':')
-		    .map(Number)
+  let lessonMinutesLeft = 0
+
+  if (currentLesson) {
+	  const [firstPeriod, lastPeriod] =
+	    currentLesson.period
+	      .split('-')
+	      .map(Number)
+	      
+	    const startTime =
+	      bellTimes[firstPeriod]?.[0]
+	      
+	    const endTime = 
+	      bellTimes[lastPeriod]?.[1]
+	      
+	    if (startTime && endTime) {
+			const [startHour, startMinute] =
+			  startTime.split(':').map(Number)
+			  
+			const [endHour, endMinute] = 
+			  endTime.split(':').map(Number)
+			  
+			const lessonStart = 
+			  startHour * 60 * 60 + 
+			  startMinute * 60 
+			 
+		    const lessonEnd = 
+		      endHour * 60 * 60 +
+		      endMinute * 60
 		    
-		  const [endHour, endMinute] = endTime
-		    .split(':')
-		    .map(Number)
-		    
-		  const lessonStart =
-		    startHour * 60 * 60 +
-		    startMinute * 60
-		    
-		  const lessonEnd = 
-		    endHour * 60 * 60 +
-		    endMinute * 60
-		    
-		  const totalDuration = 
-		    lessonEnd - lessonStart
-		    
-		  const elapsed = 
-		    totalDuration - secondsLeft
-		    
-		  lessonProgress = Math.min(
-		    100,
-		    Math.max(
-		      0,
-		      Math.round(
-		        (elapsed / totalDuration) * 100
+		    const lessonDuration = 
+		      lessonEnd - lessonStart
+		      
+		    const elapsed = 
+		      currentSecond - lessonStart
+		      
+		    lessonProgress = Math.min(
+		      100,
+		      Math.max(
+		        0,
+		        Math.round(
+		          (elapsed / lessonDuration) * 100
+		        )
 		      )
 		    )
-		  )
-	  }
-  }
+		    
+		    lessonMinutesLeft = Math.ceil(
+		      Math.max(
+		        0,
+		        lessonEnd - currentSecond
+		      ) / 60
+		    ) 
+		  }
+        }
 
   let dayStatus = 'before'
 
@@ -742,20 +751,33 @@ function App() {
           <p>
             {currentLesson.russian}
           </p>
-          
+
           <div className="lesson-progress">
+
             <div className="lesson-progress-header">
-              <span>ПРОГРЕСС ПАРЫ</span>
-              <strong>{lessonProgress}%</strong>
+
+              <span>
+                ПРОГРЕСС ПАРЫ
+              </span>
+
+              <strong>
+                {lessonProgress}% ·{' '}
+                {lessonMinutesLeft} мин
+              </strong>
+
             </div>
-            
+
             <div className="lesson-progress-bar">
+
               <div
                 className="lesson-progress-fill"
-                style={{ width: `${lessonProgress}%` }}
-                
+                style={{
+                  width: `${lessonProgress}%`,
+                }}
               />
+
             </div>
+
           </div>
 
           {secondsLeft !== null && (
@@ -889,6 +911,13 @@ function App() {
                       ? 'current'
                       : ''
                   }`}
+                  onClick={() =>
+					  setExpandedLesson(
+					    expandedLesson === index
+					      ? null
+					      : index
+					    )
+					  }
                 >
 
                   <span className="lesson-number">
@@ -903,6 +932,10 @@ function App() {
                   <h2>
                     {lesson.subject}
                   </h2>
+                  
+                  <div className="expand-indicator">
+                    {expandedLesson === index ? '⌃' : '⌄'}
+                  </div>
 
                   {isCurrent && (
                     <div className="current-label">
@@ -914,53 +947,55 @@ function App() {
                     {lesson.russian}
                   </p>
 
-                  <div className="lesson-details">
-
-                    <div>
-                      <span>
-                        周
-                      </span>
-                      {lesson.weeks}
-                    </div>
-
-                    <div>
-                      <span>
-                        教室
-                      </span>
-                      {lesson.classroom}
-                    </div>
-
-                    <div>
-                      <span>
-                        老师
-                      </span>
-                      {lesson.teacher}
-                    </div>
-
-                    <div>
-                      <span>
-                        课程
-                      </span>
-                      {lesson.courseCode}
-                    </div>
-
-                    <div>
-                      <span>
-                        班级
-                      </span>
-                      {lesson.className}
-                    </div>
-
-                    {lesson.note && (
-                      <div>
-                        <span>
-                          备注
-                        </span>
-                        {lesson.note}
-                      </div>
-                    )}
-
-                  </div>
+                 {expandedLesson === index && (
+					 <div className="lesson-details">
+					   
+					   <div>
+					     <span>
+					       周
+					     </span>
+					     {lesson.weeks}
+					   </div>
+					   
+					   <div>
+					     <span>
+					       教室
+					     </span>
+					     {lesson.classroom}
+					   </div>
+					   
+					   <div>
+					     <span>
+					       老师
+					     </span>
+					     {lesson.teacher}
+					   </div>
+					   
+					   <div>
+					     <span>
+					       课程
+					     </span>
+					     {lesson.courseCode}
+					   </div>
+					   
+					   <div>
+					     <span>
+					       班级
+					     </span>
+					     {lesson.className}
+					   </div>
+					   
+					   {lesson.note && (
+						   <div>
+						     <span>
+						       备注
+						     </span>
+						     {lesson.note}
+						   </div>
+						   )}
+						   
+						 </div>
+					 )}
 
                 </div>
 
