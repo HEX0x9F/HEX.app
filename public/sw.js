@@ -1,22 +1,22 @@
-const CACHE_NAME = 'hex-app-v1';
+const CACHE_NAME = 'hex-app-v2'
 
-const BASE_PATH = '/HEX.app/';
+const BASE_PATH = '/HEX.app/'
 
-const FILES_TO_CACHE = [
+const APP_SHELL = [
   BASE_PATH,
   `${BASE_PATH}index.html`,
   `${BASE_PATH}manifest.json`,
-];
+]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(FILES_TO_CACHE);
+      return cache.addAll(APP_SHELL)
     })
-  );
+  )
 
-  self.skipWaiting();
-});
+  self.skipWaiting()
+})
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -27,15 +27,39 @@ self.addEventListener('activate', (event) => {
           .map((key) => caches.delete(key))
       )
     )
-  );
+  )
 
-  self.clients.claim();
-});
+  self.clients.claim()
+})
 
 self.addEventListener('fetch', (event) => {
+  const request = event.request
+
+  if (request.method !== 'GET') {
+    return
+  }
+
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request);
+    caches.match(request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse
+      }
+
+      return fetch(request).then((response) => {
+        if (
+          response &&
+          response.status === 200 &&
+          response.type === 'basic'
+        ) {
+          const responseClone = response.clone()
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseClone)
+          })
+        }
+
+        return response
+      })
     })
-  );
-});
+  )
+})

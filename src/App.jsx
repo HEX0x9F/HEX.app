@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import schedule from './schedule'
 import './App.css'
 
@@ -28,8 +28,7 @@ function getSelectedDate(dayKey, currentDate) {
 
   const date = new Date(currentDate)
 
-  const difference =
-    selectedIndex - todayIndex
+  const difference = selectedIndex - todayIndex
 
   date.setDate(
     currentDate.getDate() + difference
@@ -79,6 +78,14 @@ function App() {
   const [currentTime, setCurrentTime] =
     useState(new Date())
 
+  const [selectedDay, setSelectedDay] = useState(
+    dayKeys[new Date().getDay()]
+  )
+
+  const previousDayRef = useRef(
+    dayKeys[new Date().getDay()]
+  )
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date())
@@ -87,20 +94,14 @@ function App() {
     return () => clearInterval(timer)
   }, [])
 
-  const [selectedDay, setSelectedDay] = useState(
-    dayKeys[new Date().getDay()]
-  )
-
   useEffect(() => {
     const today = dayKeys[currentTime.getDay()]
 
-    setSelectedDay((current) => {
-      if (current === today) {
-        return current
-      }
-
-      return today
-    })
+    if (previousDayRef.current !== today) {
+      previousDayRef.current = today
+      setSelectedDay(today)
+      setExpandedLesson(null)
+    }
   }, [currentTime])
 
   const currentWeek =
@@ -268,8 +269,7 @@ function App() {
             .map(Number)
 
         const lessonStart =
-          hour * 60 +
-          minute
+          hour * 60 + minute
 
         return (
           lessonStart > currentMinute
@@ -389,7 +389,7 @@ function App() {
       Math.max(
         0,
         nextLessonStartTime -
-        currentSecond
+          currentSecond
       )
   }
 
@@ -440,7 +440,8 @@ function App() {
         Math.max(
           0,
           Math.round(
-            (elapsed / lessonDuration) * 100
+            (elapsed / lessonDuration) *
+              100
           )
         )
       )
@@ -583,9 +584,10 @@ function App() {
                 ? 'active'
                 : ''
             }
-            onClick={() =>
+            onClick={() => {
               setSelectedDay(day.key)
-            }
+              setExpandedLesson(null)
+            }}
           >
             {day.name}
           </button>
@@ -929,13 +931,13 @@ function App() {
                       ? 'current'
                       : ''
                   }`}
-                  onClick={() =>
+                  onClick={() => {
                     setExpandedLesson(
                       expandedLesson === index
                         ? null
                         : index
                     )
-                  }
+                  }}
                 >
 
                   <span className="lesson-number">
