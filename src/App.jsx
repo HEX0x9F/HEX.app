@@ -111,6 +111,24 @@ function App() {
         semesterStart.getTime()
       ) / (7 * 24 * 60 * 60 * 1000)
     ) + 1
+    
+  const [selectedWeek, setSelectedWeek] = 
+    useState(currentWeek)
+    
+  const selectedWeekStart = new Date(semesterStart)
+  
+  selectedWeekStart.setDate(
+    semesterStart.getDate() +
+    (selectedWeek - 1) * 7
+  ) 
+  
+  const selectedWeekEnd = new Date(
+    selectedWeekStart
+  )
+  
+  selectedWeekEnd.setDate(
+    selectedWeekStart.getDate() + 6
+  )
 
   const lessons = (
     schedule[selectedDay] || []
@@ -124,15 +142,16 @@ function App() {
     const endWeek = Number(match[2])
 
     return (
-      currentWeek >= startWeek &&
-      currentWeek <= endWeek
+      selectedWeek >= startWeek &&
+      selectedWeek <= endWeek
     )
   })
 
   const todayKey =
     dayKeys[currentTime.getDay()]
 
-  const isToday =
+  const isToday = 
+    selectedWeek === currentWeek &&
     selectedDay === todayKey
 
   const currentMinute =
@@ -544,35 +563,70 @@ function App() {
         </span>
 
         <strong>
-          第 {currentWeek} 周
+          第 {selectedWeek} 周
         </strong>
 
-        <p>
-          {getSelectedDate(
-            'monday',
-            currentTime
-          ).toLocaleDateString(
-            'ru-RU',
-            {
-              day: 'numeric',
-              month: 'long',
-            }
-          )}
-
-          {' — '}
-
-          {getWeekEndDate(
-            currentTime
-          ).toLocaleDateString(
-            'ru-RU',
-            {
-              day: 'numeric',
-              month: 'long',
-            }
-          )}
-        </p>
-
-      </div>
+         <p>
+           {selectedWeekStart.toLocaleDateString(
+			   'ru-RU',
+			   {
+				   day: 'numeric',
+				   month: 'long',
+			   }
+			 )}
+			
+			 {' — '}
+			
+			 {selectedWeekEnd.toLocaleDateString(
+			 	 'ru-RU',
+				 {
+					 day: 'numeric',
+					 month: 'long',
+				 }
+			   )}
+		  </p>
+		</div>
+      
+      <div className="week-switcher">
+        <button
+          onClick={() => {
+			  setSelectedWeek((week) =>
+			    Math.max(1, week -1)
+			  )
+			  setSelectedDay('monday')
+			  setExpandedLesson(null)
+		  }}
+		>
+		  ←
+		</button>
+		
+		<strong>
+		  {selectedWeek} НЕДЕЛЯ
+		</strong>
+		
+		<button
+		  onClick={() => {
+			  setSelectedWeek((week) =>
+			    Math.min(17, week + 1)
+			  )
+			  setSelectedDay('monday')
+              setExpandedLesson(null)
+		  }}
+		>
+		  →
+		</button>
+	  </div>
+	  
+	  <button
+	    className="today-button"
+	    onClick={() => {
+			setSelectedWeek(currentWeek)
+			setSelectedDay(todayKey)
+			setExpandedLesson(null)
+		}}
+	   >
+	     今天
+       </button>
 
       <nav className="days">
 

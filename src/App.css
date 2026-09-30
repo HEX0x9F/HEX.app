@@ -490,3 +490,55 @@ button {
     font-size: 12px;
   }
 }
+
+.week-switch {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.week-switcher button {
+	width: 32px;
+	height: 28px;
+	padding: 0;
+	border: 1px solid #2a383f;
+	border-radius: 6px;
+	background: #111814;
+	color: #9cffb0;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.week-switcher button:hover {
+	background: #1a251f;
+}
+
+.week-switcher strong {
+	font-size: 16px;
+}
+
+.today-button {
+	display: block;
+	margin: 0 auto 14px;
+	padding: 7px 18px;
+	border: 1px solid #2a382f;
+	border-radius: 8px;
+	background: #111814;
+	color: #9cffb0;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.today-button:hover {
+	backround: #1a251f;
+}
+
+
+
+
+
+
+
+
+
