@@ -73,9 +73,9 @@ const bellTimes = {
 }
 
 function App() {
-  const [expandedLesson, setExpandedLesson] = 
+  const [expandedLesson, setExpandedLesson] =
     useState(null)
-	
+
   const [currentTime, setCurrentTime] =
     useState(new Date())
 
@@ -90,6 +90,18 @@ function App() {
   const [selectedDay, setSelectedDay] = useState(
     dayKeys[new Date().getDay()]
   )
+
+  useEffect(() => {
+    const today = dayKeys[currentTime.getDay()]
+
+    setSelectedDay((current) => {
+      if (current === today) {
+        return current
+      }
+
+      return today
+    })
+  }, [currentTime])
 
   const currentWeek =
     Math.floor(
@@ -377,7 +389,7 @@ function App() {
       Math.max(
         0,
         nextLessonStartTime -
-          currentSecond
+        currentSecond
       )
   }
 
@@ -385,56 +397,62 @@ function App() {
   let lessonMinutesLeft = 0
 
   if (currentLesson) {
-	  const [firstPeriod, lastPeriod] =
-	    currentLesson.period
-	      .split('-')
-	      .map(Number)
-	      
-	    const startTime =
-	      bellTimes[firstPeriod]?.[0]
-	      
-	    const endTime = 
-	      bellTimes[lastPeriod]?.[1]
-	      
-	    if (startTime && endTime) {
-			const [startHour, startMinute] =
-			  startTime.split(':').map(Number)
-			  
-			const [endHour, endMinute] = 
-			  endTime.split(':').map(Number)
-			  
-			const lessonStart = 
-			  startHour * 60 * 60 + 
-			  startMinute * 60 
-			 
-		    const lessonEnd = 
-		      endHour * 60 * 60 +
-		      endMinute * 60
-		    
-		    const lessonDuration = 
-		      lessonEnd - lessonStart
-		      
-		    const elapsed = 
-		      currentSecond - lessonStart
-		      
-		    lessonProgress = Math.min(
-		      100,
-		      Math.max(
-		        0,
-		        Math.round(
-		          (elapsed / lessonDuration) * 100
-		        )
-		      )
-		    )
-		    
-		    lessonMinutesLeft = Math.ceil(
-		      Math.max(
-		        0,
-		        lessonEnd - currentSecond
-		      ) / 60
-		    ) 
-		  }
-        }
+    const [
+      firstPeriod,
+      lastPeriod,
+    ] = currentLesson.periods
+      .split('-')
+      .map(Number)
+
+    const startTime =
+      bellTimes[firstPeriod]?.[0]
+
+    const endTime =
+      bellTimes[lastPeriod]?.[1]
+
+    if (startTime && endTime) {
+      const [startHour, startMinute] =
+        startTime
+          .split(':')
+          .map(Number)
+
+      const [endHour, endMinute] =
+        endTime
+          .split(':')
+          .map(Number)
+
+      const lessonStart =
+        startHour * 60 * 60 +
+        startMinute * 60
+
+      const lessonEnd =
+        endHour * 60 * 60 +
+        endMinute * 60
+
+      const lessonDuration =
+        lessonEnd - lessonStart
+
+      const elapsed =
+        currentSecond - lessonStart
+
+      lessonProgress = Math.min(
+        100,
+        Math.max(
+          0,
+          Math.round(
+            (elapsed / lessonDuration) * 100
+          )
+        )
+      )
+
+      lessonMinutesLeft = Math.ceil(
+        Math.max(
+          0,
+          lessonEnd - currentSecond
+        ) / 60
+      )
+    }
+  }
 
   let dayStatus = 'before'
 
@@ -912,12 +930,12 @@ function App() {
                       : ''
                   }`}
                   onClick={() =>
-					  setExpandedLesson(
-					    expandedLesson === index
-					      ? null
-					      : index
-					    )
-					  }
+                    setExpandedLesson(
+                      expandedLesson === index
+                        ? null
+                        : index
+                    )
+                  }
                 >
 
                   <span className="lesson-number">
@@ -932,13 +950,18 @@ function App() {
                   <h2>
                     {lesson.subject}
                   </h2>
-                  
+
                   <div className="expand-indicator">
-                    {expandedLesson === index ? '⌃' : '⌄'}
+                    {expandedLesson === index
+                      ? '⌃'
+                      : '⌄'}
                   </div>
 
                   {isCurrent && (
                     <div className="current-label">
+                      <span className="current-dot">
+                        ●
+                      </span>
                       进行中 · Сейчас идёт
                     </div>
                   )}
@@ -947,55 +970,62 @@ function App() {
                     {lesson.russian}
                   </p>
 
-                 {expandedLesson === index && (
-					 <div className="lesson-details">
-					   
-					   <div>
-					     <span>
-					       周
-					     </span>
-					     {lesson.weeks}
-					   </div>
-					   
-					   <div>
-					     <span>
-					       教室
-					     </span>
-					     {lesson.classroom}
-					   </div>
-					   
-					   <div>
-					     <span>
-					       老师
-					     </span>
-					     {lesson.teacher}
-					   </div>
-					   
-					   <div>
-					     <span>
-					       课程
-					     </span>
-					     {lesson.courseCode}
-					   </div>
-					   
-					   <div>
-					     <span>
-					       班级
-					     </span>
-					     {lesson.className}
-					   </div>
-					   
-					   {lesson.note && (
-						   <div>
-						     <span>
-						       备注
-						     </span>
-						     {lesson.note}
-						   </div>
-						   )}
-						   
-						 </div>
-					 )}
+                  {expandedLesson === index && (
+                    <div className="lesson-details">
+
+                      <div>
+                        <span>
+                          时间
+                        </span>
+                        {startTime} - {endTime}
+                      </div>
+
+                      <div>
+                        <span>
+                          周
+                        </span>
+                        {lesson.weeks}
+                      </div>
+
+                      <div>
+                        <span>
+                          教室
+                        </span>
+                        {lesson.classroom}
+                      </div>
+
+                      <div>
+                        <span>
+                          老师
+                        </span>
+                        {lesson.teacher}
+                      </div>
+
+                      <div>
+                        <span>
+                          课程
+                        </span>
+                        {lesson.courseCode}
+                      </div>
+
+                      <div>
+                        <span>
+                          班级
+                        </span>
+                        {lesson.className}
+                      </div>
+
+                      {lesson.note && (
+                        <div>
+                          <span>
+                            备注
+                          </span>
+                          {lesson.note}
+                        </div>
+                      )}
+
+                    </div>
+                  )}
 
                 </div>
 
