@@ -375,12 +375,8 @@ function App() {
   let secondsLeft = null
 
   if (currentLesson) {
-    const lastPeriod = Number(
-      currentLesson.periods.split('-')[1]
-    )
-
-    const endTime =
-      bellTimes[lastPeriod]?.[1]
+    const endTime = 
+      bellTimes[currentPeriod]?.[1]
 
     if (endTime) {
       const [endHour, endMinute] =
@@ -836,7 +832,9 @@ function App() {
 
               <strong>
                 {lessonProgress}% ·{' '}
-                {lessonMinutesLeft} мин
+                {Array.from({
+                  lenght: lastPeriod - firstPeriod + 1,
+                }, (_, index) => 45).join(' + ')} мин
               </strong>
 
             </div>
