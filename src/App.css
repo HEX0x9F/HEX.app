@@ -435,6 +435,12 @@ button {
   transition: width 1s linear;
 }
 
+.lesson-period-progress {
+  margin: 8px 0 0;
+  color: #7c8a82;
+  font-size: 12px;
+}
+
 /* MOBILE */
 
 @media (max-width: 600px) {
@@ -533,7 +539,6 @@ button {
 .today-button:hover {
 	backround: #1a251f;
 }
-
 
 
 

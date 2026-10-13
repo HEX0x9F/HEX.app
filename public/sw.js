@@ -1,4 +1,5 @@
-const CACHE_NAME = 'hex-app-v2'
+const CACHE_NAME = 'hex-app-v3'
+const CACHE_PREFIX = 'hex-app-'
 
 const BASE_PATH = '/HEX.app/'
 
@@ -12,10 +13,8 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(APP_SHELL)
-    })
+    }).then(() => self.skipWaiting())
   )
-
-  self.skipWaiting()
 })
 
 self.addEventListener('activate', (event) => {
@@ -23,13 +22,15 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key !== CACHE_NAME)
+          .filter(
+            (key) =>
+              key.startsWith(CACHE_PREFIX) &&
+              key !== CACHE_NAME
+          )
           .map((key) => caches.delete(key))
       )
-    )
+    ).then(() => self.clients.claim())
   )
-
-  self.clients.claim()
 })
 
 self.addEventListener('fetch', (event) => {
@@ -39,27 +40,50 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse
-      }
+  const requestUrl = new URL(request.url)
 
-      return fetch(request).then((response) => {
+  if (
+    requestUrl.origin !== self.location.origin ||
+    !requestUrl.pathname.startsWith(BASE_PATH)
+  ) {
+    return
+  }
+
+  event.respondWith(
+    (async () => {
+      try {
+        const response = await fetch(request)
+
         if (
           response &&
           response.status === 200 &&
           response.type === 'basic'
         ) {
-          const responseClone = response.clone()
-
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, responseClone)
-          })
+          const cacheUpdate = caches
+            .open(CACHE_NAME)
+            .then((cache) => cache.put(request, response.clone()))
+          event.waitUntil(cacheUpdate)
         }
 
         return response
-      })
-    })
+      } catch (error) {
+        const cache = await caches.open(CACHE_NAME)
+        const cachedResponse = await cache.match(request)
+
+        if (cachedResponse) {
+          return cachedResponse
+        }
+
+        if (request.mode === 'navigate') {
+          const appShell = await cache.match(`${BASE_PATH}index.html`)
+
+          if (appShell) {
+            return appShell
+          }
+        }
+
+        throw error
+      }
+    })()
   )
 })
