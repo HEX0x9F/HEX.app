@@ -67,16 +67,15 @@ function getSelectedWeekDate(dayKey, weekStart) {
 function LessonProgress({
   lesson,
   lessonProgress,
-  periodProgress,
 }) {
-  const durations = getLessonPeriodDurations(lesson.periods)
+  const duration = getLessonPeriodDurations(lesson.periods)
 
   return (
     <div className="lesson-progress">
       <div className="lesson-progress-header">
         <span>ПРОГРЕСС ПАРЫ</span>
         <strong>
-          {lessonProgress}% · {durations.join(' + ')} мин
+          {lessonProgress}% · {duration.reduce((sum, duration) => sum + duration, 0)} мин
         </strong>
       </div>
 
@@ -87,11 +86,6 @@ function LessonProgress({
         />
       </div>
 
-      {periodProgress !== null && (
-        <p className="lesson-period-progress">
-          Текущий период: {periodProgress}%
-        </p>
-      )}
     </div>
   )
 }
@@ -505,7 +499,7 @@ function App() {
             <div className="countdown">
 
               <span className="countdown-title">
-                ДО КОНЦА ПЕРИОДА
+                ДО КОНЦА УРОКА
               </span>
 
               <div className="countdown-time">
@@ -562,6 +556,33 @@ function App() {
             <span>
               Следующая пара
             </span>
+
+              {dayStatus == 'before' &&
+                secondsUntilNextLesson !== null && (
+                  <div className="countdown">
+                    <span className="countdown-title">
+                      НАЧАЛО ЧЕРЕЗ
+                    </span>
+
+                    <div className="countdown-time">
+                      <div className="contdown-unit">
+                        <strong>
+                          {Math.floor(secondsUntilNextLesson / 60)}
+                        </strong>
+                        <span>мин</span>
+                      </div>
+
+                      <div className="countdown-separator">:</div>
+
+                      <div className="countdown-unit">
+                        <strong>
+                          {String(secondsUntilNextLesson % 60).padStart(2, '0')}
+                        </strong>
+                        <span>сек</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
             <h2>
               {nextLesson.subject}
