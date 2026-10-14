@@ -547,53 +547,32 @@ function App() {
         </div>
       )}
 
-      {nextLesson &&
-        !currentLesson &&
-        !internalBreakLesson &&
-        dayStatus !== 'finished' && (
-          <div className="next-lesson">
+      {nextLesson && dayStatus !== 'finished' && (
+        <div className="next-lesson">
+          <div className="next-lesson-icon">▦</div>
 
-            <span>
-              Следующая пара
-            </span>
-
-              {dayStatus == 'before' &&
-                secondsUntilNextLesson !== null && (
-                  <div className="countdown">
-                    <span className="countdown-title">
-                      НАЧАЛО ЧЕРЕЗ
-                    </span>
-
-                    <div className="countdown-time">
-                      <div className="contdown-unit">
-                        <strong>
-                          {Math.floor(secondsUntilNextLesson / 60)}
-                        </strong>
-                        <span>мин</span>
-                      </div>
-
-                      <div className="countdown-separator">:</div>
-
-                      <div className="countdown-unit">
-                        <strong>
-                          {String(secondsUntilNextLesson % 60).padStart(2, '0')}
-                        </strong>
-                        <span>сек</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-            <h2>
-              {nextLesson.subject}
-            </h2>
-
-            <p>
-              {nextLesson.russian}
-            </p>
-
+          <div className="next-lesson-info">
+            <span>Следующая пара</span>
+            <h2>{nextLesson.subject}</h2>
+            <p>{nextLesson.russian}</p>
           </div>
-        )}
+
+          <div className="next-lesson-room">
+            <span>⌖ {nextLesson.classroom || 'Аудитория не указана'}</span>
+            <p>Аудитория</p>
+          </div>
+
+          {secondsUntilNextLesson !== null && (
+            <div className="next-lesson-countdown">
+              <strong>
+                {Math.floor(secondsUntilNextLesson / 60)}:
+                {String(secondsUntilNextLesson % 60).padStart(2, '0')}
+              </strong>
+              <p>до начала</p>
+            </div>
+          )}
+        </div>
+      )}
 
       <main className="schedule">
 

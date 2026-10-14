@@ -246,34 +246,35 @@ button {
 /* NEXT LESSON */
 
 .next-lesson {
-  margin-bottom: 24px;
-  padding: 18px 20px;
-  background: #18221c;
-  border: 1px solid #2a382f;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 14px 18px;
+  background: #111814;
+  border: 1px solid #9cffb0;
   border-radius: 16px;
 }
 
 .next-lesson span {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: #9cffb0;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
 }
 
 .next-lesson h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .next-lesson p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
   color: #7c8a82;
   font-size: 13px;
 }
-
 /* CURRENT STATUS */
 
 .current-status {
@@ -537,7 +538,7 @@ button {
 }
 
 .today-button:hover {
-	backround: #1a251f;
+	background: #1a251f;
 }
 
 

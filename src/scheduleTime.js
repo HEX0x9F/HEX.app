@@ -111,7 +111,7 @@ export function getScheduleState(lessons, currentTime, isToday) {
     nextLesson = internalBreakLesson ?? orderedLessons.find((lesson) => {
       const [firstPeriod] = getLessonPeriodRange(lesson)
       const startTime = bellTimes[firstPeriod]?.[0]
-      return startTime !== undefined && toSeconds(startTime) > nowSeconds
+      return startTime !== undefined && toSeconds(startTime) > nowSeconds && lesson !== currentLesson
     }) ?? null
 
     if (secondsUntilNextLesson === null && nextLesson) {
