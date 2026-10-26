@@ -94,6 +94,8 @@ function App() {
   const [expandedLesson, setExpandedLesson] =
     useState(null)
 
+  const [isNextLessonOpen, setIsNextLessonOpen] = useState(false)
+
   const [currentTime, setCurrentTime] =
     useState(new Date())
 
@@ -172,6 +174,95 @@ function App() {
     periodProgress,
     dayStatus,
   } = getScheduleState(lessons, currentTime, isToday)
+
+  const getLessonsForDate = (date) => {
+    const week = getWeekNumber(date)
+    const dayKey = dayKeys[date.getDay()]
+    console.log('CHECK DAY:', dayKey, schedule[dayKey], Array.isArray(schedule[dayKey]))
+
+    return sortLessonsByPeriod(
+      (schedule[dayKey] || []).filter((lesson) => {
+        const match = lesson.weeks.match(/(\d+)-(\d+)周/)
+
+        if (!match) return true
+
+        return (
+          week >= Number(match[1]) && 
+          week <= Number(match[2])
+        )
+      })
+    )
+  }
+
+  let upcomingLesson 
+  let upcomingLessonAt = null
+
+  if (!isToday) {
+    upcomingLesson = lessons[0] ?? null
+  } else {
+    const nowSeconds =
+      currentTime.getHours() * 3600 + 
+      currentTime.getMinutes() * 60 +
+      currentTime.getSeconds()
+
+    upcomingLesson = lessons.find((lesson) => {
+      const [firstPeriod] = getLessonPeriodRange(lesson)
+      const startTime = bellTimes[firstPeriod]?.[0]
+
+      if (!startTime) return false
+
+      const [hour, minute] = startTime.split(':').map(Number)
+      const startSeconds = hour * 3600 + minute * 60
+
+      return (
+        startSeconds > nowSeconds &&
+        lesson !== currentLesson &&
+        lesson !== internalBreakLesson
+      )
+    }) ?? null
+
+    if (upcomingLesson) {
+      const [firstPeriod] = getLessonPeriodRange(upcomingLesson)
+      const [hour, minute] = bellTimes[firstPeriod][0]
+        .split(':')
+        .map(Number)
+
+      upcomingLessonAt = new Date(currentTime)
+      upcomingLessonAt.setHours(hour,minute, 0, 0)
+    } else {
+      for (let offset = 1; offset <= 7; offset += 1) {
+        const date = new Date(currentTime)
+        date.setDate(date.getDate() + offset)
+
+        const nextDayLessons = getLessonsForDate(date)
+
+        if (nextDayLessons.lenght === 0) continue
+
+        upcomingLesson = nextDayLessons[0]
+
+        const [firstPeriod] = 
+          getLessonPeriodRange(upcomingLesson)
+
+        const [hour, minute] = bellTimes[firstPeriod][0]
+          .split(':')
+          .map(Number)
+
+        date.setHours(hour, minute, 0, 0)
+        upcomingLessonAt = date
+        break
+      }
+    }
+  }
+
+  const upcomingSeconds = upcomingLessonAt
+    ? Math.max(
+      0,
+      Math.floor(
+        (upcomingLessonAt.getTime() - currentTime.getTime()) /
+          1000
+      )
+    )
+  : null
 
   return (
     <div className="app">
@@ -547,32 +638,111 @@ function App() {
         </div>
       )}
 
-      {nextLesson && dayStatus !== 'finished' && (
-        <div className="next-lesson">
-          <div className="next-lesson-icon">▦</div>
+      {upcomingLesson && (
+        <>
+          <button
+            type="button"
+            className="next-lesson-trigger"
+            onClick={() => setIsNextLessonOpen((open) => !open)}
+          >
+            <span className="next-lesson-trigger-icon">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                >
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <path d="M16 3v4M8 11h18" />
+                  <path d="M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h.01" />
+                </svg>
+            </span>
 
-          <div className="next-lesson-info">
-            <span>Следующая пара</span>
-            <h2>{nextLesson.subject}</h2>
-            <p>{nextLesson.russian}</p>
-          </div>
+            <span className="next-lesson-trigger-copy">
+              <strong>下一节课</strong>
+              <small>点击查看详情</small>
+            </span>
 
-          <div className="next-lesson-room">
-            <span>⌖ {nextLesson.classroom || 'Аудитория не указана'}</span>
-            <p>Аудитория</p>
-          </div>
+            <span className="next-lesson-trigger-arrow">›</span>
+            </button>
 
-          {secondsUntilNextLesson !== null && (
-            <div className="next-lesson-countdown">
-              <strong>
-                {Math.floor(secondsUntilNextLesson / 60)}:
-                {String(secondsUntilNextLesson % 60).padStart(2, '0')}
-              </strong>
-              <p>до начала</p>
-            </div>
-          )}
-        </div>
-      )}
+            {isNextLessonOpen && (
+
+              <div
+                className="next-lesson-modal-backdrop"
+                onClick={() => setIsNextLessonOpen(false)}
+                
+              >
+                <section
+                  className="next-lesson-modal"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="next-lesson-modal-title"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <button
+                    type="button"
+                    className="next-lesson-modal-close"
+                    onClick={() => setIsNextLessonOpen(false)}
+                    aria-label="关闭窗口"
+                  >
+                    ×
+                  </button>
+
+                  <span className="next-lesson-modal-label">下一节课</span>
+                  <h2 id="next-lesson-modal-title">
+                    {upcomingLesson.subject}
+                  </h2>
+
+                  <p className="next-lesson-modal-translation">
+                    {upcomingLesson.russian}
+                  </p>
+
+                  <div className="next-lesson-modal-details">
+                    <div>
+                      <span>教室</span>
+                      <strong>{upcomingLesson.classroom || '未指定'}</strong>
+                    </div>
+
+                    <div>
+                      <span>开始时间</span>
+                      <strong>
+                        {bellTimes[getLessonPeriodRange(upcomingLesson)[0]]?.[0] || '—'}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>结束时间</span>
+                      <strong>
+                        {bellTimes[getLessonPeriodRange(upcomingLesson)[1]]?.[1] || '—'}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span>距离开始</span>
+                      <strong>
+                        {upcomingSeconds !== null
+                          ? `${Math.floor(upcomingSeconds / 60)}:${String(
+                              upcomingSeconds % 60
+                          ).padStart(2, '0')}`
+                          : '—'}
+                        
+                      </strong>
+                    </div>
+                  </div>
+                </section>
+              </div> 
+            )}
+            </>
+            )}
+
+            
+          
 
       <main className="schedule">
 
