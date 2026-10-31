@@ -236,7 +236,7 @@ function App() {
 
         const nextDayLessons = getLessonsForDate(date)
 
-        if (nextDayLessons.lenght === 0) continue
+        if (nextDayLessons.length === 0) continue
 
         upcomingLesson = nextDayLessons[0]
 
