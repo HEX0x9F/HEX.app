@@ -73,9 +73,9 @@ function LessonProgress({
   return (
     <div className="lesson-progress">
       <div className="lesson-progress-header">
-        <span>ПРОГРЕСС ПАРЫ</span>
+        <span>课程进度</span>
         <strong>
-          {lessonProgress}% · {duration.reduce((sum, duration) => sum + duration, 0)} мин
+          {lessonProgress}% · {duration.reduce((sum, duration) => sum + duration, 0)} 分钟
         </strong>
       </div>
 
@@ -288,9 +288,6 @@ function App() {
             我的课程表
             <span> · </span>
             {selectedWeek} 周
-            <span className="header-translation">
-              ({selectedWeek} неделя)
-            </span>
           </p>
         </div>
 
@@ -330,7 +327,7 @@ function App() {
 
          <p>
            {selectedWeekStart.toLocaleDateString(
-			   'ru-RU',
+			   'zh-CH',
 			   {
 				   day: 'numeric',
 				   month: 'long',
@@ -340,7 +337,7 @@ function App() {
 			 {' — '}
 			
 			 {selectedWeekEnd.toLocaleDateString(
-			 	 'ru-RU',
+			 	 'zh-CH',
 				 {
 					 day: 'numeric',
 					 month: 'long',
@@ -419,16 +416,16 @@ function App() {
         <div className="current-status">
 
           <span>
-            Перемена
+            课间休息
           </span>
 
           <h2>
-            Сейчас перерыв
+            休息中
           </h2>
 
           {nextLesson && (
             <p>
-              Продолжение:{' '}
+              继续上课：{' '}
               {nextLesson.subject}
             </p>
           )}
@@ -445,7 +442,7 @@ function App() {
             <div className="countdown">
 
               <span className="countdown-title">
-                ДО НАЧАЛА
+                距离上课
               </span>
 
               <div className="countdown-time">
@@ -454,15 +451,14 @@ function App() {
 
                   <strong>
                     {Math.floor(
-                      secondsUntilNextLesson /
+                      secondsUntilNextLesson / 
                       60
                     )}
                   </strong>
 
                   <span>
-                    мин
+                    分
                   </span>
-
                 </div>
 
                 <div className="countdown-separator">
@@ -470,7 +466,6 @@ function App() {
                 </div>
 
                 <div className="countdown-unit">
-
                   <strong>
                     {String(
                       secondsUntilNextLesson %
@@ -482,7 +477,7 @@ function App() {
                   </strong>
 
                   <span>
-                    сек
+                    秒
                   </span>
 
                 </div>
@@ -499,25 +494,24 @@ function App() {
         <div className="current-status">
 
           <span>
-            Перемена
+            课间休息
           </span>
 
           <h2>
-            Сейчас перерыв
+            休息中
           </h2>
 
           {nextLesson && (
             <p>
-              Следующая пара:{' '}
+              下一节课：{' '}
               {nextLesson.subject}
             </p>
           )}
 
           {secondsUntilNextLesson !== null && (
             <div className="countdown">
-
               <span className="countdown-title">
-                ДО НАЧАЛА ПАРЫ
+                距离上课
               </span>
 
               <div className="countdown-time">
@@ -526,13 +520,13 @@ function App() {
 
                   <strong>
                     {Math.floor(
-                      secondsUntilNextLesson /
+                      secondsUntilNextLesson / 
                       60
                     )}
                   </strong>
 
                   <span>
-                    мин
+                    分
                   </span>
 
                 </div>
@@ -554,7 +548,7 @@ function App() {
                   </strong>
 
                   <span>
-                    сек
+                    秒
                   </span>
 
                 </div>
@@ -571,17 +565,16 @@ function App() {
         <div className="current-status">
 
           <span>
-            Сегодня
+            今日
           </span>
 
           <h2>
-            Занятия закончились
+            今日课程已结束
           </h2>
 
           <p>
-            На сегодня больше пар нет.
+            今天没有更多课程了。
           </p>
-
         </div>
       )}
 
@@ -827,7 +820,7 @@ function App() {
                       <span className="current-dot">
                         ●
                       </span>
-                      进行中 · Сейчас идёт
+                      进行中 
                     </div>
                   )}
 
