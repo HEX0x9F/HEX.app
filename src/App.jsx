@@ -268,39 +268,55 @@ function App() {
     <div className="app">
 
       <header className="header">
-
-        <div>
+        <div className="header-main">
           <p className="subtitle">
-            МОЁ РАСПИСАНИЕ · {selectedWeek} НЕДЕЛЯ
+            HEX.APP <span> / </span> 课程管理系统
           </p>
 
           <h1>
             {getSelectedWeekDate(
               selectedDay,
               selectedWeekStart
-            ).toLocaleDateString(
-              'ru-RU',
+            ).toLocaleDateString('zh-CH', {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </h1>
+
+          <p className="header-description">
+            我的课程表
+            <span> · </span>
+            {selectedWeek} 周
+            <span className="header-translation">
+              ({selectedWeek} неделя)
+            </span>
+          </p>
+        </div>
+
+        <div className="header-clock">
+          <span className="header-clock-label">
+            北京时间
+          </span>
+
+          <div className="current-time">
+            {currentTime.toLocaleTimeString(
+              'zh-CH',
               {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
               }
             )}
-          </h1>
-        </div>
+          </div>
 
-        <div className="current-time">
-          {currentTime.toLocaleTimeString(
-            'ru-RU',
-            {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-            }
-          )}
+          <span className="header-clock-status">
+            <span className="status-indicator"></span>
+            实时更新
+          </span>
         </div>
-
       </header>
+
 
       <div className="week-info">
 
@@ -335,33 +351,37 @@ function App() {
       
       <div className="week-switcher">
         <button
+          aria-label="上一周"
+          title="上一周"
           onClick={() => {
-			  setSelectedWeek((week) =>
-			    Math.max(1, week -1)
-			  )
-			  setSelectedDay('monday')
-			  setExpandedLesson(null)
-		  }}
-		>
-		  ←
-		</button>
-		
-		<strong>
-		  {selectedWeek} НЕДЕЛЯ
-		</strong>
-		
-		<button
-		  onClick={() => {
-			  setSelectedWeek((week) =>
-			    Math.min(17, week + 1)
-			  )
-			  setSelectedDay('monday')
-              setExpandedLesson(null)
-		  }}
-		>
-		  →
-		</button>
-	  </div>
+            setSelectedWeek((week) => 
+              Math.max(1, week - 1)
+            )
+            setSelectedDay('monday')
+            setExpandedLesson(null)
+          }}
+        >
+          ←
+        </button>
+
+        <strong>
+          第 {selectedWeek} 周
+        </strong>
+
+        <button
+          aria-label="下一周"
+          title="下一周"
+          onClick={() => {
+            setSelectedWeek((week) =>
+              Math.min(17, week + 1)
+            )
+            setSelectedDay('monday')
+            setExpandedLesson(null)
+          }}
+        >
+          →
+        </button>
+      </div>
 	  
 	  <button
 	    className="today-button"
@@ -569,7 +589,7 @@ function App() {
         <div className="current-status">
 
           <span>
-            Сейчас
+            正在上课
           </span>
 
           <h2>
@@ -590,23 +610,16 @@ function App() {
             <div className="countdown">
 
               <span className="countdown-title">
-                ДО КОНЦА УРОКА
+                距离下课
               </span>
 
               <div className="countdown-time">
 
                 <div className="countdown-unit">
-
                   <strong>
-                    {Math.floor(
-                      secondsLeft / 60
-                    )}
+                    {Math.floor(secondsLeft / 60)}
                   </strong>
-
-                  <span>
-                    мин
-                  </span>
-
+                  <span>分</span>
                 </div>
 
                 <div className="countdown-separator">
@@ -614,28 +627,16 @@ function App() {
                 </div>
 
                 <div className="countdown-unit">
-
                   <strong>
-                    {String(
-                      secondsLeft % 60
-                    ).padStart(
-                      2,
-                      '0'
-                    )}
+                    {String(secondsLeft % 60).padStart(2, '0')}
                   </strong>
-
-                  <span>
-                    сек
-                  </span>
-
+                  <span>秒</span>
                 </div>
-
+                </div>
               </div>
-
-            </div>
-          )}
-
-        </div>
+            )}
+         
+         </div>
       )}
 
       {upcomingLesson && (

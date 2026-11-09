@@ -32,7 +32,7 @@ body {
   font-family: Arial, sans-serif;
     background:
     radial-gradient(
-      ellipes at 50% -15%,
+      ellipse at 50% -15%,
       rgba(30, 90,52,0.22),
       transparent 55%
     ),
@@ -87,6 +87,60 @@ button {
   text-transform: capitalize;
 }
 
+.header-main {
+  min-width: 0;
+}
+
+.header-description {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.header-translation {
+  margin-left: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.header-clock {
+  flex-shrink: 0;
+  min-width: 150px;
+  padding: 16px 20px;
+  background: var(--radius-card);
+  border: 1px solid var(--radius-card);
+  text-align: right;
+}
+
+.header-clock-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.header-clock-status {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 7px;
+  margin-top: 7px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.status-indicator {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
+}
+
 .current-time {
   color: var(--accent);
   font-size: 25px;
@@ -131,7 +185,7 @@ button {
 
 .days button.active {
   color: #d9ffe2;
-  background: liner-gradient(
+  background: linear-gradient(
   135deg,
   #245d39,
   #19472b
@@ -174,7 +228,7 @@ button {
   flex: 1;
   padding: 22px 24px;
   background: var(--bg-surface);
-  border: 1px solid var(--bordor-subtle);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-card);
   cursor: pointer;
   user-select: none;
