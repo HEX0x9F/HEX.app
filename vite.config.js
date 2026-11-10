@@ -4,6 +4,6 @@ import react from '@vitejs/plugin-react'
 import { cloudflare } from "@cloudflare/vite-plugin";
 
 export default defineConfig({
-  base: '/HEX.app/',
+  base: '/',
   plugins: [react(), cloudflare()],
 })
