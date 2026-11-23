@@ -178,7 +178,6 @@ function App() {
   const getLessonsForDate = (date) => {
     const week = getWeekNumber(date)
     const dayKey = dayKeys[date.getDay()]
-    console.log('CHECK DAY:', dayKey, schedule[dayKey], Array.isArray(schedule[dayKey]))
 
     return sortLessonsByPeriod(
       (schedule[dayKey] || []).filter((lesson) => {
@@ -346,6 +345,7 @@ function App() {
 		  </p>
 		</div>
       
+    <div className="week-navigator">
       <div className="week-switcher">
         <button
           aria-label="上一周"
@@ -390,6 +390,8 @@ function App() {
 	   >
 	     今天
        </button>
+
+       </div>
 
       <nav className="days">
 
@@ -782,16 +784,16 @@ function App() {
                 </div>
 
                 <div
-                  className={`lesson-card ${
-                    isCurrent
-                      ? 'current'
-                      : ''
-                  }`}
+                  className={[
+                    'lesson-card',
+                    isCurrent ? 'current' : '',
+                    expandedLesson === index ? 'expanded' : '',
+                  ].filter(Boolean).join(' ')}
                   onClick={() => {
                     setExpandedLesson(
                       expandedLesson === index
-                        ? null
-                        : index
+                      ? null
+                      : index
                     )
                   }}
                 >
